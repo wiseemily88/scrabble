@@ -1,7 +1,42 @@
 class Scrabble
+  attr_reader :word
+  attr_accessor :total
 
-  def score(word)
-    1
+  def initialize(word = nil)
+    @word = word
+    @total = 0
+    @dbl_letter = []
+    @dbl_word = []
+  end
+
+  def score(word = nil)
+    if word == nil
+    else
+      word_split_for_each_letter = word.chars
+      word_split_for_each_letter.each do |letter|
+        @total += point_values[letter.upcase].to_i
+      end
+    end
+    @total
+  end
+
+  def score_with_multipliers( word, dbl_letter, dbl_word = nil)
+    multiple_letter = []
+    @dbl_letter = dbl_letter
+    if dbl_word == nil
+      word_split_for_each_letter = word.chars
+      word_split_for_each_letter.each do |letter|
+        multiple_letter << point_values[letter.upcase].to_i
+      end
+      new_score = multiple_letter.zip(dbl_letter).map{|i,j| i*j }.inject(:+)
+    else
+      word_split_for_each_letter = word.chars
+      word_split_for_each_letter.each do |letter|
+        @total += point_values[letter.upcase].to_i
+      end
+      new_score = @total * 2
+    end
+    new_score
   end
 
   def point_values
